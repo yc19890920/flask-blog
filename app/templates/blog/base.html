@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>博客 - {% block title %}{% endblock %}</title>
+
+    <link href="{{ url_for('static', filename='blog/src/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='blog/src/bootstrap-responsive.min.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='blog/src/framework.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='blog/src/framework-responsive.min.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='blog/src/customize.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='blog/src/customize-responsive.min.css') }}" rel="stylesheet">
+
+    {% block head_css %}{% endblock %}
+    {% block head_js %}{% endblock %}
+
+    <!--[if lt IE 9]><script src='{{ url_for('static', filename='blog/src/html5shiv.min.js') }}'></script><![endif]-->
+</head>
+
+<body data-exts-scrollup="1" data-spy="scroll">
+<header class="header topfix">
+    <nav class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="container">
+                <a class="brand" href="{{ url_for('blog.index') }}">博客<br>flaskblog.com</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li id="nav_index" class=""><a href="{{ url_for('blog.index') }}">活动日志</a></li>
+                        <li id="nav_about" class=""><a href="{{ url_for('blog.about') }}">关于我</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="vessel">
+    <div class="container">
+
+        {% block page_content %}{% endblock %}
+
+    </div>
+</main>
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="span8">
+                <div class="text-center">
+                    <p>©2017 <a href="https://github.com/yc19890920">github.com</a>.</p>
+                    <p>Designed and built with all the love in the world by <a href="https://github.com/yc19890920" target="_blank">Y.C</a>.</p>
+
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('blog.index') }}" target="_blank">活动日志</a></li>
+                        <li><a href="{{ url_for('blog.about') }}" target="_blank">关于我</a></li>
+                        <li><a href="{{ url_for('blog.about') }}#email" target="_blank">留言反馈</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src='{{ url_for('static', filename='blog/src/jquery-1.10.1.min.js') }}'></script>
+<script src='{{ url_for('static', filename='blog/src/jquery.form.min.js') }}'></script>
+<script src='{{ url_for('static', filename='blog/src/jquery.scrollUp.min.js') }}'></script>
+<script src='{{ url_for('static', filename='blog/src/bootstrap.min.js') }}'></script>
+<script src='{{ url_for('static', filename='blog/src/customize.min.js') }}'></script>
+
+{% block foot_js %}{% endblock %}
+
+<script type="text/javascript">
+    $(function(){
+        var path = window.location.pathname;
+        if (path.indexOf('/about')==0){
+            $('#nav_about').addClass('active');
+        } else{
+            $('#nav_index').addClass('active');
+        };
+    });
+</script>
+
+</body>
+</html>

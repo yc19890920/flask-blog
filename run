@@ -1,0 +1,4 @@
+
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py recreate_db
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py runserver
+

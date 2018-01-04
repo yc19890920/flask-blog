@@ -1,0 +1,150 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} 活动日志 {% endblock %}
+
+{% block head_css %}{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+
+        <div class="span8">
+
+            <!-- 顶部图片 -->
+            <div id="carousel" class="carousel slide thumbnail">
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel" data-slide-to="0"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="{{ url_for('static', filename='blog/img/1.png') }}">
+                        <div class="carousel-caption">
+                            <h4>Hello World</h4>
+                            <p>Code is Poetry, Life is Sweet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 顶部url -->
+            <ul class="breadcrumb">
+                <li><a href="{{ url_for('blog.index') }}"><i class="icon-home"></i></a> <span class="divider">/</span></li>
+                <li><a href="{{ url_for('blog.index') }}">活动日志</a> <span class="divider">/</span></li>
+                {% if search_for %}
+                    <li class="active">搜索：{{ search_for }}</li>
+                {% elif tag_name %}
+                    <li class="active">标签：{{ tag_name }}</li>
+                {% endif %}
+            </ul>
+
+            <!-- 文章 -->
+            <div>
+
+                <div class="article-list">
+
+                    {% for d in article_list.items %}
+                        <article class="article-wrap">
+
+                            <div class="article-head">
+                                <a href="{{ url_for('blog.detail', article_id=d.id) }}" title="{{ d.title }}"><h4>{{ d.title }}</h4></a>
+                                <p>
+                                    <small>标签：</small>
+                                    <small>
+                                        {% for t in d.tags %}
+                                            <a href="{{ url_for('blog.tag', tag_id=t.id) }}"><span class="label label-success">{{ t.name }}</span></a>&nbsp;&nbsp;
+                                        {% endfor %}
+                                    </small>
+                                </p>
+                            </div>
+
+                            <div class="article-body">
+                                {{ d.abstract | safe }}
+                            </div>
+
+                            <div class="article-foot">
+                                <p></p>
+                                <p class="text-right"><a><small>{{ d.auth|e }}</small></a><small> 发布于 {{ d.created }}</small></p>
+                                <p class="text-right"><a href="{{ url_for('blog.detail', article_id=d.id) }}" title="{{ d.title }}">全文 » </a></p>
+                            </div>
+
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <!-- 分页 -->
+                <div class="pagination pagination-centered">
+                    <ul>
+                        {% if article_list.page != 1 %}
+                            <li><a href="{{ url_for('blog.index') }}?page=1">首页</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="javascript:;">首页</a></li>
+                        {% endif %}
+
+                        {% if article_list.has_prev %}
+                            <li><a href="{{ url_for('blog.index') }}?page={{ article_list.prev_num }}">上一页</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="javascript:;">上一页</a></li>
+                        {% endif %}
+
+                        {% for page in article_list.iter_pages() %}
+                            {% if article_list.page == page %}
+                                <li class="disabled"><a href="javascript:;">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('blog.index') }}?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if article_list.has_next %}
+                            <li><a href="{{ url_for('blog.index') }}?page={{ article_list.next_num }}">下一页</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="javascript:;">下一页</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar span4">
+
+            <!-- 搜索 -->
+            {% include 'blog/include/search.html' %}
+
+            <!-- 标签 -->
+            {% include 'blog/include/tag.html' %}
+
+            <!-- 热门文章 -->
+            {% include 'blog/include/hot.html' %}
+
+            <!-- 最新文章 -->
+            {% include 'blog/include/new_art.html' %}
+
+            <!-- 最新评论 -->
+            {% include 'blog/include/new_com.html' %}
+
+        </div>
+
+
+    </div>
+
+
+    <a id="scrollUp" href="#top" title="" style="position: fixed; z-index: 2147483647; display: none;"></a>
+{% endblock %}
+
+{% block foot_js %}
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=30516020" charset="UTF-8"></script>
+    <script type="text/javascript">
+        /*
+         var _gaq = _gaq || [];
+         _gaq.push(['_setAccount', 'UA-42785503-1']);
+         _gaq.push(['_trackPageview']);
+
+         (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+         */
+    </script>
+{% endblock %}

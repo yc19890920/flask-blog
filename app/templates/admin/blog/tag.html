@@ -1,0 +1,186 @@
+{% extends 'admin/base_site.html' %}
+
+{% block title %} 标签 {% endblock %}
+
+{% block breadcrumb %}
+    <li> <a href="#">博客</a> </li>
+    <li class="active">标签</li>
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="space-12"></div>
+        <div class="col-xs-12">
+            <div class="page-header">
+                <h1>标签</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-horizontal" >
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="col-sm-1 control-label no-padding-right" for="id_name_bak"> 标签： </label>
+                        <label class="col-sm-3">
+                            <!--<label class="control-label pull-left">地址：</label>-->
+                            <input type="text" maxlength="60" id="id_name_bak" name="name_bak" value="" class="col-xs-12 col-sm-12"/>
+                        </label>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="Javascript: addStatus()">添加</button>
+                    </div>
+                </div>
+                <div class="hr hr-16 hr-dotted"></div>
+            </div>
+        </div><!-- /.span -->
+    </div><!-- /.row -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <form id="id_form" action="" method="POST">
+                <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+                <input type="hidden" name="id" id="id" />
+                <input type="hidden" name="name" id="name" />
+                <input type="hidden" name="status" id="status" />
+                <input type="hidden" name="ids" id="ids" />
+            </form>
+            <table id="ajax-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th width="4%">序号</th>
+                    <th>名称</th>
+                    <th>创建时间</th>
+                    <th>修改时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for d in tag_list %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ d.name|e }}</td>
+                        <td>{{ d.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ d.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            <a type="button" class="btn btn-minier btn-danger" href="Javascript: setStatus({{ d.id }}, 'delete')">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css_block %}
+    <link href="{{ url_for('static', filename='components/datatables/media/css/dataTables.bootstrap.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block my_jsblock %}
+    <script src="{{ url_for('static', filename='components/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='components/_mod/datatables/jquery.dataTables.bootstrap.js') }}"></script>
+
+    <script>
+
+        function addStatus(){
+            var name = $("#id_name_bak").val();
+            $('#name').val(name);
+            $('#status').val("add");
+            $('#id_form').submit();
+            return;
+        }
+
+        function setStatus(rule_id, status){
+            var str = '是否确认此操作？';
+            if(confirm(str)) {
+                $('#id').val(rule_id);
+                $('#status').val(status);
+                $('#id_form').submit();
+            }
+            return;
+        }
+
+        var ip_table;
+        $(function () {
+            ip_table = $('#ajax-table').dataTable({
+                // "columnDefs": [ { "targets": [ 0 ], "visible": false, "searchable": false }],
+                "iDisplayLength": 25,
+                //"processing": false,
+                //"serverSide": true,
+                //"stateSave": true,
+                "autoWidth" : true,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "all"]],
+                "aaSorting": [
+                    [ 1, "asc" ]
+                ],
+                "oLanguage": {
+                    "sLengthMenu": "显示 _MENU_ 每页",
+                    "sZeroRecords": "对不起! 信息筛选结果为空!",
+                    "sInfo": "从 _START_ 到 _END_ 总计: _TOTAL_ 条记录",
+                    "sInfoEmpty": "总计: 0 条记录",
+                    "sInfoFiltered": "(从 _MAX_ 条记录筛选出)",
+                    "sSearch": "搜索: ",
+                    "oPaginate": {
+                        "sFirst":    "第一页",
+                        "sPrevious": "上一页",
+                        "sNext":     "下一页",
+                        "sLast":     "最后一页"
+                    }
+                },
+                // "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+ "t"+ "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+
+                "drawCallback": function(oSettings, json) {
+                    $('#dt_basic tr').click( function() {
+                        if ( $(this).hasClass('row_selected') )
+                            $(this).removeClass('row_selected');
+                        else
+                            $(this).addClass('row_selected');
+                    } );
+                },
+
+            });
+        });
+
+        $.fn.dataTableExt.oApi.fnGetFilteredNodes = function ( oSettings ) {
+            var anRows = [];
+            var length = oSettings.aiDisplay.length;
+            for ( var i=0, iLen=length ; i<iLen ; i++ ) {
+                var nRow = oSettings.aoData[ oSettings.aiDisplay[i] ].nTr;
+                anRows.push( nRow );
+            }
+            return anRows;
+        };
+
+        function fnGetAll() {
+            var aTrs = ip_table.fnGetFilteredNodes();
+            for ( var i=0 ; i<aTrs.length ; i++ ) {
+                if ( !$(aTrs[i]).hasClass('row_selected') )
+                    $(aTrs[i]).addClass('row_selected');
+            }
+        }
+
+        function fnGetReverse() {
+            var aTrs = ip_table.fnGetFilteredNodes();
+            for (var i=0 ; i<aTrs.length ; i++ ) {
+                if ( $(aTrs[i]).hasClass('row_selected') ) {
+                    $(aTrs[i]).removeClass('row_selected');
+                }
+            }
+        }
+
+        function fnGetSelected() {
+            var aReturn = new Array();
+            var aTrs = ip_table.fnGetFilteredNodes();
+            for ( var i=0 ; i<aTrs.length ; i++ ) {
+                if ( $(aTrs[i]).hasClass('row_selected') ) {
+                    var aData = ip_table.fnGetData( aTrs[i]);
+                    var iId = aData[0];
+                    aReturn.push( iId );
+                }
+            }
+            return aReturn;
+        }
+
+    </script>
+
+{% endblock %}

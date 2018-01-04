@@ -1,0 +1,64 @@
+<article class="col-sm-12">
+    {% for tags, message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{ tags }} fade in">
+            <button class="close" data-dismiss="alert">×</button>
+            <i class="fa-fw fa fa-{{ tags }}"></i>
+            <strong>{{ tags|title }}</strong> {{ message }}
+        </div>
+    {% endfor %}
+</article>
+
+<form id="form-talk" class="form-horizontal" method="post" action="{{ url_for('blog.detail', article_id=article.id) }}">
+    {{ form.csrf_token }}
+
+    <fieldset>
+
+        <div class="control-group {% if form.username.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_username">你的名称：</label>
+            <div class="controls">
+                {{ form.username(class='span3', required='', minlength="3", maxlength="64") }}
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <p class="has-error">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="control-group {% if form.email.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_email">你的邮箱：</label>
+            <div class="controls">
+                {{ form.email(class='span3', required='', minlength="6", maxlength="64") }}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <p class="has-error">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="control-group {% if form.content.errors %}has-error{% endif %}">
+            <label class="control-label" for="id_content">留言反馈：</label>
+            <div class="controls">
+                {{ form.content(class='span5', required='', rows="8") }}
+                {% if form.content.errors %}
+                    {% for error in form.content.errors %}
+                        <p class="has-error">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <div class="captcha span3" style="margin-left:0"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-success input-large">提交评论</button>
+                <span class="help-inline"></span>
+            </div>
+        </div>
+    </fieldset>
+</form>

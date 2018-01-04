@@ -1,0 +1,5 @@
+<ul class="inline">
+    {% for d in tag_list %}
+        <li><a href="{{ url_for('blog.tag', tag_id=d.id) }}">{{ d.name }}</a></li>
+    {% endfor %}
+</ul>
