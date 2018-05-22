@@ -1,16 +1,24 @@
 # -*- coding: utf-8 -*-
 
 import os
+# import gevent
+# import gevent.monkey
+# gevent.monkey.patch_all()
+
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell, Server
 
-from app import create_app, db
+# from app import create_app, db
+from app import app, db
 from app.auth.models import User
 from app.blog.models import Tag, Category, Article, CKPicture, BlogComment, Suggest
 
-app = create_app()
+# app = create_app()
 manager = Manager(app)
 migrate = Migrate(app, db)
+
+# import sys
+# print >> sys.stderr, app.url_map
 
 def make_shell_context():
     return dict(

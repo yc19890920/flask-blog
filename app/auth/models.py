@@ -2,6 +2,7 @@
 import hashlib
 from datetime import datetime
 from flask import current_app
+from flask import url_for
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -105,6 +106,33 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User \'%s\'>' % self.username
+
+    def to_json(self):
+        json_user = {
+            # 'url': url_for('api.get_user', id=self.id),
+            'username': self.username,
+            'email': self.email,
+            # 'member_since': self.member_since,
+            # 'last_seen': self.last_seen,
+            # 'posts_url': url_for('api.get_user_posts', id=self.id),
+            # 'followed_posts_url': url_for('api.get_user_followed_posts', id=self.id),
+            # 'post_count': self.posts.count()
+        }
+        return json_user
+
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'],
+                       expires_in=expiration)
+        return s.dumps({'id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return None
+        return User.query.get(data['id'])
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, _):

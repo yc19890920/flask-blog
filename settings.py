@@ -65,6 +65,17 @@ class Config():
     # take a reference to the book <<Flask Framework Cookbook>>.
     # But the book only have the version of English.
 
+    FLASKY_POSTS_PER_PAGE = 20
+    FLASKY_FOLLOWERS_PER_PAGE = 50
+    FLASKY_COMMENTS_PER_PAGE = 30
+    FLASKY_SLOW_DB_QUERY_TIME = 0.5
+
+    # JWT
+    JWT_AUTH_URL_RULE = '/jwt-auth'
+    # JWT_AUTH_ENDPOINT = 'jwt'
+    # JWT_AUTH_USERNAME_KEY = 'username'
+    # JWT_AUTH_PASSWORD_KEY = 'password'
+
     @staticmethod
     def init_app(app):
         pass
