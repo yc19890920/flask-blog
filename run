@@ -4,3 +4,7 @@ sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py runserver
 
 cd /home/python/git/flask-blog
 /home/python/pyenv/versions/flask-blog/bin/gunicorn  -w 4 -k gevent -b 0.0.0.0:6060  manage:app
+
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py db init
+
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py db migrate
