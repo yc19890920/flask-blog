@@ -258,7 +258,7 @@ def ckupload():
     """CKEditor file upload"""
     error = ''
     callback = request.args.get("CKEditorFuncNum")
-    print request.files['upload']
+    print (request.files['upload'])
     if request.method == 'POST' and 'upload' in request.files:
         fileobj = request.files['upload']
         content_type = fileobj.content_type
@@ -271,7 +271,7 @@ def ckupload():
             fname = fname.encode("utf-8")
         except BaseException as e:
             fname = uuname
-            print e
+            print (e)
         path = os.path.join(Config.CKUPLOAD_DIR, uuname)
         fileobj.save(path)
 

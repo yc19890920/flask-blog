@@ -14,15 +14,18 @@ class Config():
     CKUPLOAD_DIR = os.path.join(BASE_DIR, 'app', "static", "ckupload")
 
 
+
+    # 连接数据库操作
+    # python2
+    # SQLALCHEMY_DATABASE_URI = "mysql://fblog:123456@localhost:3306/flaskblog?charset=utf8"
+    # python3
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://fblog:123456@localhost:3306/flaskblog?charset=utf8"
+    # 请求结束自动提交数据库变动
     # 每次request后数据库自动调用commit
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     # 如果设置成 True (默认情况)，Flask-SQLAlchemy 将会追踪对象的修改并且发送信号。这需要额外的内存， 如果不必要的可以禁用它。
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
-
-    # 连接数据库操作
-    SQLALCHEMY_DATABASE_URI = "mysql://fblog:123456@localhost:3306/flaskblog?charset=utf8"
-    # SQLALCHEMY_DATABASE_URI = "mysql://fblog:123456@127.0.0.1:3306/flask-blog?charset=utf8"
 
     UPLOADIMG_HOST = ""
 

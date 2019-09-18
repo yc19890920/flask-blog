@@ -46,6 +46,38 @@ app.register_blueprint(blog_blueprint)
 from app.api import api as api_blueprint
 app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
+import logging
+
+# rootLogger = logging.getLogger(__name__)
+# rootLogger.setLevel(logging.DEBUG)
+# socketHandler = logging.handlers.SocketHandler('localhost',logging.handlers.DEFAULT_TCP_LOGGING_PORT)
+# rootLogger.addHandler(socketHandler)
+# rootLogger.setLevel(logging.DEBUG)
+# logger = logging.getLogger(__name__)
+
+@app.before_request
+def xxxxxxxxxx1():
+    # logger.info('前1')
+    print('前1')
+    # return "不要再来烦我了"
+
+@app.before_request
+def xxxxxxxxxx2():
+    # logger.info('前2')
+    print('前2')
+
+@app.after_request
+def oooooooo1(response):
+    # logger.info('后1')
+    print('后1')
+    return response
+
+@app.after_request
+def oooooooo2(response):
+    # logger.info('后2')
+    print('后2')
+    return response
+
 # def create_app():
 #     app = Flask(__name__)
 #

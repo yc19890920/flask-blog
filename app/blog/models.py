@@ -9,7 +9,7 @@ from app import db, Config
 from app.libs.exceptions import ValidationError
 from app.libs.tools import smart_bytes
 
-PicP = re.compile(ur'src="(\/static\/ckupload\/.*?)"')
+PicP = re.compile(r'src="(\/static\/ckupload\/.*?)"')
 
 acrticle_tags_ref = db.Table(
     'blog_article_tags',

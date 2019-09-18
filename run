@@ -1,4 +1,21 @@
+python3：
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py recreate_db
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py runserver
 
+
+cd /home/python/git/flaskblog
+/home/python/pyenv/versions/flask-blog/bin/gunicorn -c gconf.py manage:app
+/home/python/pyenv/versions/flask-blog/bin/gunicorn -c configm.py manage:app
+/home/python/pyenv/versions/flask-blog/bin/gunicorn  manage:app --workers=9 --bind=0.0.0.0:6060 --worker-class="egg:meinheld#gunicorn_worker" --threads=30 --worker-connections=2000 --backlog=2048 --timeout=120 --log-level info
+/home/python/pyenv/versions/flask-blog/bin/gunicorn  -w 4 -b 0.0.0.0:6060  manage:app --threads=30 --worker-connections=2000 --backlog=2048 --timeout=120 --log-level info --worker-class="egg:meinheld#gunicorn_worker"
+-w 4 -b 127.0.0.1:9998 WebVue.wsgi:application --worker-class="egg:meinheld#gunicorn_worker" --threads=30 --worker-connections=2000 --backlog=2048 --timeout=120 --user=root --group=root --log-level error --access-logfile=/usr/local/u-mail/webvue/log/webvue.log --error-logfile=/usr/local/u-mail/webvue/log/webvue.error
+
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py db init
+
+sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py db migrate
+
+
+python2：
 sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py recreate_db
 sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py runserver
 
@@ -8,3 +25,5 @@ cd /home/python/git/flask-blog
 sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py db init
 
 sudo /home/python/pyenv/versions/flask-blog/bin/python manage.py db migrate
+
+
